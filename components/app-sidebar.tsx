@@ -104,7 +104,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-medium">学生工作管理平台</span>
-                  <span className="">DETA v0.1.0</span>
+                  <span className="">FOOTPRINT v0.1.0</span>
                 </div>
               </a>
             </SidebarMenuButton>
