@@ -13,9 +13,70 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(uuid())
+  name          String?
+  email         String   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// 班级表
+model Class {
+  id          String   @id @default(cuid())  // 班级主键ID
+  grade       String                         // 年级（例如：2023级）
+  majorName   String                         // 专业名
+  majorAbbr   String?                        // 专业简称（新增字段，设为可选）
+  classNumber String                         // 班号（例如：1班、2班）
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 一对多关系：一个班级包含多个学生
+  students    Student[]
+
+  @@map("classes")
+}
+
+// 学生表（保持不变）
+model Student {
+  id           String   @id @default(cuid())  // 学生主键ID
+  studentId    String   @unique               // 学号（唯一）
+  name         String                         // 姓名
+  idCardNumber String   @unique               // 身份证号（唯一）
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // 关联到班级表的外键
+  classId      String
+  // 一对多关系：一个学生属于一个班级
+  class        Class    @relation(fields: [classId], references: [id])
+
+  @@map("students")
 }
