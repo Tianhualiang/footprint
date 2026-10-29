@@ -1,11 +1,22 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { GalleryVerticalEnd } from "lucide-react"
+import * as React from "react";
+
+import { GalleryVerticalEnd } from "lucide-react";
+import { NavUser } from "@/components/ui/nav-user";
+
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
@@ -14,7 +25,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // This is sample data.
 const data = {
@@ -25,7 +36,7 @@ const data = {
       items: [
         {
           title: "操行考评",
-          url: "#",
+          url: "test",
         },
         {
           title: "行为记录",
@@ -89,7 +100,7 @@ const data = {
       ],
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -137,6 +148,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser
+          user={{
+            name: "陈宁",
+            email: "chenning@example.com",
+            avatar: "/avatars/chenning.jpg",
+          }}
+        />
+      </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

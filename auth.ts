@@ -1,14 +1,20 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./lib/prisma";
+import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: "jwt" },
   pages: {
     signIn: "/login",
-    signOut: "/sign-out",
+    //signOut: "/sign-out",
   },
   callbacks: {
+    authorized: async ({ auth }) => {
+      console.log("auth", auth);
+      // Logged in users are authenticated, otherwise redirect to login page
+      return !!auth;
+    },
     jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
@@ -31,12 +37,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         username: {
           label: "用户名",
           type: "text",
-          placeholder: "输入你的用户名",
+          placeholder: "请输入用户名",
         },
         password: {
           label: "密码",
           type: "password",
-          placeholder: "输入你的密码",
+          placeholder: "请输入密码",
         },
       },
       authorize: async (credentials) => {
@@ -46,9 +52,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: { username: credentials.username as string },
         });
 
-        if (user && user.password === credentials.password) {
+        if (!user) return null;
+
+        const passwordMatch = await bcrypt.compare(
+          credentials.password as string,
+          user.password
+        );
+
+        if (passwordMatch) {
+          console.log("User authenticated:", user);
           return user;
         }
+
         return null;
       },
     }),
