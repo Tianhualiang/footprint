@@ -10,10 +10,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     //signOut: "/sign-out",
   },
   callbacks: {
-    authorized: async ({ auth }) => {
-      console.log("auth", auth);
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth;
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+      console.log("isLoggedIn:", isLoggedIn, "isOnDashboard:", isOnDashboard);
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false; // Redirect unauthenticated users to login page
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL("/dashboard", nextUrl));
+      }
+      return true;
     },
     jwt: async ({ token, user }) => {
       if (user) {
@@ -60,7 +67,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         );
 
         if (passwordMatch) {
-          console.log("User authenticated:", user);
           return user;
         }
 

@@ -42,6 +42,7 @@ export default function Login() {
               className="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
             />
           </div>
+          <input type="hidden" name="redirectTo" value="/dashboard" />
           <button
             type="submit"
             className="w-full rounded bg-blue-500 py-2 px-4 font-semibold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"

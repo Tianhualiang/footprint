@@ -6,14 +6,6 @@ import { GalleryVerticalEnd } from "lucide-react";
 import { NavUser } from "@/components/ui/nav-user";
 
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -32,15 +24,15 @@ const data = {
   navMain: [
     {
       title: "学生管理",
-      url: "dashboard",
+      url: "/dashboard",
       items: [
         {
           title: "操行考评",
-          url: "test",
+          url: "/dashboard/test",
         },
         {
           title: "行为记录",
-          url: "#",
+          url: "/behavior-records",
         },
         {
           title: "住宿管理",
